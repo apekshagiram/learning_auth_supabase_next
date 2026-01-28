@@ -12,20 +12,46 @@ export default function Login() {
   const supabase = createClient()
 
   async function handleSignIn() {
-    console.log("Signing in");
-    //Step 1 - create the supabase client
-    //Step 2 - sign in the user
-    //Step 3 - redirect to the dashboard
-    //Step 4 - show a success message
+    try {
+      setError('')
+
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (signInError) {
+        setError(`❌ ${signInError.message}`)
+        return
+      }
+
+      setError('✅ Sign in successful! Redirecting...')
+      window.location.href = '/dashboard'
+
+    } catch (err) {
+      setError(`❌ ${err.message}`)
+    }
   }
 
   async function handleSignUp() {
-    console.log("Signing up");
-    //Step 1 - create the supabase client
-    //Step 2 - sign up the user
-    //Step 3 - redirect to the dashboard
-    //Step 4 - show a success message
-    //Step 5 - show an error message if the user already exists
+    try {
+      setError('')
+
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+      })
+
+      if (signUpError) {
+        setError(`❌ ${signUpError.message}`)
+        return
+      }
+
+      setError('✅ Sign up successful! Check your email to confirm, then sign in.')
+
+    } catch (err) {
+      setError(`❌ ${err.message}`)
+    }
   }
 
   return (
